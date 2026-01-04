@@ -1,8 +1,11 @@
 import express from "express";
+import { createServer } from "http";
+import { WebSocketServer } from "ws"
 
+const app = express()
+const server = createServer(app);
 
-const app = express();
-
+app.use(express.static('public'))
 
 
 
