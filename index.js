@@ -12,7 +12,7 @@ import { handleAskForCard, handleCardDraw } from "./gameManager/cardManager.js";
 const app = express()
 const server = createServer(app);
 const io = new Server(server, {
-    maxHttpBufferSize: 10240  // 10KB 
+    maxHttpBufferSize: 24576  // 24KB 
 });
 
 // static files
