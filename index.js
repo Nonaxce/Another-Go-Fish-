@@ -6,7 +6,7 @@ import { Server } from "socket.io";
 import { indexRouter } from "./routes/indexRouter.js";
 
 // import managers
-import { handleAskForCard, handleCardDraw, handleIDontHaveThatCard } from "./eventManager/cardManager.js";
+import { handleAskForCard, handleCardDraw, handleIDontHaveThatCard } from "./src/eventManager/cardManager.js";
 
 // setup server
 const app = express()
