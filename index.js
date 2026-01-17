@@ -25,7 +25,6 @@ app.get("/", indexRouter)
 io.on("connection", (socket) => {
     console.log("A player connected")
 
-
     socket.on("disconnect", () => {
         console.log("A player left")
     })
@@ -40,9 +39,21 @@ io.on("connection", (socket) => {
 // start server
 const PORT = process.env.PORT || 3000;
 const LOCAL_IP = process.env.LOCAL_IP || ""
-server.listen(PORT, LOCAL_IP, (error) => {
-    if (error) {
-        throw error;
-    }
+server.listen(PORT, LOCAL_IP, () => {
     console.log(`Server started at http://${LOCAL_IP || "localhost"}:${PORT}`)
+})
+
+// server error handling
+server.on('error', (error) => {
+    if (error.code === "EADDRINUSE") {
+        console.log(`Port ${PORT} might be in use on another program. Try using a different port.`)
+        process.exit(1);
+    } else if (error.code === "EADDRNOTAVAIL") {
+        console.log(`IP address ${LOCAL_IP} is not available on this device`)
+        console.log(`Check network connection or make sure LOCAL_IP matches the IP address of this device.`)
+        process.exit(1);
+    } else {
+        console.log("Server failed to start, ",error.message)
+        process.exit(1);
+    }
 })
