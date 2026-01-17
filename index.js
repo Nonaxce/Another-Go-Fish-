@@ -6,13 +6,13 @@ import { Server } from "socket.io";
 import { indexRouter } from "./routes/indexRouter.js";
 
 // import managers
-import { handleAskForCard, handleCardDraw } from "./gameManager/cardManager.js";
+import { handleAskForCard, handleCardDraw, handleIDontHaveThatCard } from "./eventManager/cardManager.js";
 
 // setup server
 const app = express()
 const server = createServer(app);
 const io = new Server(server, {
-    maxHttpBufferSize: 24576  // 24KB 
+    maxHttpBufferSize: process.env.MAX_HTTP_BUFFER_SIZE || 102400 // 100KB
 });
 
 // static files
@@ -30,9 +30,11 @@ io.on("connection", (socket) => {
         console.log("A player left")
     })
     // player ask for a card 
-    socket.on("player:ask", (card, player) => handleAskForCard(card, player))
+    socket.on("player:ask", (socket, card, player) => handleAskForCard(socket, card, player))
     // player draws a card from deck
-    socket.on("player:draw", () => handleCardDraw(socket))
+    socket.on("player:draw", (socket) => handleCardDraw(socket))
+    // 
+    socket.on("player:Idonthavethatcard", (player) => handleIDontHaveThatCard(socket, player))
 })
 
 // start server
@@ -40,7 +42,7 @@ const PORT = process.env.PORT || 3000;
 const LOCAL_IP = process.env.LOCAL_IP || ""
 server.listen(PORT, LOCAL_IP, (error) => {
     if (error) {
-        throw error
+        throw error;
     }
     console.log(`Server started at http://${LOCAL_IP || "localhost"}:${PORT}`)
 })

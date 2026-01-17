@@ -24,15 +24,21 @@ async function handleCardDraw(socket) {
     }
 }
 
-async function handleAskForCard(card, targetPlayer) {
+async function handleAskForCard(socket, card, targetPlayer) {
+    let turn = ""
     if (turn !== socket.id) {
         // handle
     }
-    console.log(`Player ${socket.id} asked ${player} for ${card}`);
+    console.log(`Player ${socket.id} asked ${targetPlayer} for ${card}`);
+}
+
+async function handleIDontHaveThatCard(player) {
+
 }
 
 // export
 export {
     handleCardDraw,
-    handleAskForCard
+    handleAskForCard,
+    handleIDontHaveThatCard
 }
